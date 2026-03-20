@@ -1,9 +1,11 @@
-FROM eclipse-temurin:17-jdk
+FROM public.ecr.aws/docker/library/openjdk:17
 
 WORKDIR /app
 
-COPY HelloWorld.java .
+COPY HelloWebServer.java .
 
-RUN javac HelloWorld.java
+RUN javac HelloWebServer.java
 
-CMD ["java", "HelloWorld"]
+EXPOSE 9090
+
+CMD ["java", "HelloWebServer"]
