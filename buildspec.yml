@@ -8,20 +8,34 @@ env:
 
 phases:
 
+  install:
+    commands:
+      - echo "Install phase started"
+
   pre_build:
     commands:
       - echo "Checking AWS identity..."
       - aws sts get-caller-identity
+
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
   build:
     commands:
+      - echo "Listing files in current directory..."
+      - ls -l
+
       - echo "Build started..."
-      - docker build -t $REPOSITORY_NAME .   # ✅ FIX HERE
+      - docker build -t $REPOSITORY_NAME .
+
+      - echo "Tagging Docker image..."
       - docker tag $REPOSITORY_NAME:latest $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$REPOSITORY_NAME:latest
 
   post_build:
     commands:
-      - echo "Pushing image..."
+      - echo "Pushing image to ECR..."
       - docker push $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$REPOSITORY_NAME:latest
+
+artifacts:
+  files:
+    - '**/*'
