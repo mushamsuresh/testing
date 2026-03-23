@@ -27,7 +27,7 @@ public class HelloWebServer {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
 
-            String response = "Hello from DevOps Web App! Running on port 9090";
+            String response = "Version 2 - Pipeline Working!";
 
             exchange.sendResponseHeaders(200, response.length());
             OutputStream os = exchange.getResponseBody();
